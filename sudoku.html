@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sudoku Game</title>
+    <style>
+        body {
+            background-color: #a8dadc; /* Same soft blue */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: monospace;
+            margin: 0;
+        }
+
+        h1 {
+            color: #1d3557;
+        }
+
+        .sudoku-board {
+            display: grid;
+            grid-template-columns: repeat(9, 50px);
+            grid-template-rows: repeat(9, 50px);
+            grid-gap: 2px;
+            margin: 20px 0;
+            border: 2px solid #457b9d;
+            background-color: #f1faee;
+        }
+
+        .sudoku-cell {
+            width: 50px;
+            height: 50px;
+            background-color: #1d3557;
+            color: #f1faee;
+            font-size: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            border: 2px solid #457b9d;
+            border-radius: 4px;
+        }
+
+        .sudoku-cell input {
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            border-radius: 4px;
+            font-size: 20px;
+            border: none;
+        }
+
+        .sudoku-cell:hover {
+            background-color: #457b9d;
+        }
+
+        /* Dark border between 3x3 blocks */
+        .sudoku-board .sudoku-cell:nth-child(3n) {
+            border-right: 3px solid #000;
+        }
+
+        .sudoku-board .sudoku-cell:nth-child(27), 
+        .sudoku-board .sudoku-cell:nth-child(54),
+        .sudoku-board .sudoku-cell:nth-child(81) {
+            border-bottom: 3px solid #000;
+        }
+
+        .sudoku-board .sudoku-cell:nth-child(3n + 1) {
+            border-left: 3px solid #000;
+        }
+
+        .sudoku-board .sudoku-cell:nth-child(-n+9) {
+            border-top: 3px solid #000;
+        }
+
+        #message {
+            font-size: 20px;
+            color: #000;
+            background: #f1faee;
+            padding: 10px 20px;
+            border: 2px solid #457b9d;
+            border-radius: 10px;
+        }
+
+        .buttons {
+            margin-top: 20px;
+        }
+
+        .buttons button {
+            background-color: #457b9d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .buttons button:hover {
+            background-color: #1d3557;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Sudoku</h1>
+    <div id="message">Solve the Sudoku Puzzle!</div>
+
+    <div class="sudoku-board" id="board">
+        <!-- 81 cells for sudoku -->
+    </div>
+
+    <div class="buttons">
+        <button onclick="restartGame()">Restart</button>
+        <button onclick="goBack()">Back</button>
+    </div>
+
+    <script>
+        const board = document.getElementById('board');
+        const message = document.getElementById('message');
+        let sudokuGrid = [
+            [5, 3, 0, 0, 7, 0, 0, 0, 0],
+            [6, 0, 0, 1, 9, 5, 0, 0, 0],
+            [0, 9, 8, 0, 0, 0, 0, 6, 0],
+            [8, 0, 0, 0, 6, 0, 0, 0, 3],
+            [4, 0, 0, 8, 0, 3, 0, 0, 1],
+            [7, 0, 0, 0, 2, 0, 0, 0, 6],
+            [0, 6, 0, 0, 0, 0, 2, 8, 0],
+            [0, 0, 0, 4, 1, 9, 0, 0, 5],
+            [0, 0, 0, 0, 8, 0, 0, 7, 9]
+        ];
+        
+        let inputCells = [];
+
+        function createSudokuBoard() {
+            for (let row = 0; row < 9; row++) {
+                for (let col = 0; col < 9; col++) {
+                    const cell = document.createElement('div');
+                    cell.classList.add('sudoku-cell');
+                    const index = row * 9 + col;
+                    if (sudokuGrid[row][col] !== 0) {
+                        cell.textContent = sudokuGrid[row][col];
+                        cell.style.backgroundColor = '#457b9d'; // Already filled cells are styled differently
+                    } else {
+                        const input = document.createElement('input');
+                        input.type = 'number';
+                        input.min = 1;
+                        input.max = 9;
+                        input.addEventListener('input', function () {
+                            checkSudoku();
+                        });
+                        cell.appendChild(input);
+                        inputCells.push(input);
+                    }
+                    board.appendChild(cell);
+                }
+            }
+        }
+
+        function checkSudoku() {
+            let solved = true;
+            for (let row = 0; row < 9; row++) {
+                for (let col = 0; col < 9; col++) {
+                    const index = row * 9 + col;
+                    const input = inputCells[index];
+                    if (input && input.value !== '') {
+                        if (parseInt(input.value) !== sudokuGrid[row][col]) {
+                            solved = false;
+                        }
+                    }
+                }
+            }
+
+            // Check if the game is solved
+            let allFilled = true;
+            inputCells.forEach(input => {
+                if (input.value === '') {
+                    allFilled = false;
+                }
+            });
+
+            if (allFilled && solved) {
+                alert("🎉 Congratulations! You solved the Sudoku!");
+                message.textContent = "Sudoku Solved! 🎉";
+            }
+        }
+
+        function restartGame() {
+            inputCells.forEach(input => {
+                input.value = ''; // Clear input values
+                input.style.backgroundColor = ''; // Reset any color change
+            });
+            message.textContent = "Solve the Sudoku Puzzle!";
+        }
+
+        function goBack() {
+            window.location.href = "http://localhost/webp_games/index.php"; // Change to your main page if needed
+        }
+
+        createSudokuBoard();
+    </script>
+
+</body>
+</html>

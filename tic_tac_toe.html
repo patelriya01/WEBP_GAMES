@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tic Tac Toe Game</title>
+    <style>
+        body {
+            background-color: #a8dadc; /* Same soft blue */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: monospace;
+            margin: 0;
+        }
+
+        h1 {
+            color: #1d3557;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-gap: 5px;
+            margin: 20px 0;
+        }
+
+        .cell {
+            width: 100px;
+            height: 100px;
+            background-color: #1d3557;
+            color: #f1faee;
+            font-size: 48px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            border: 2px solid #457b9d;
+            border-radius: 8px;
+        }
+
+        .cell:hover {
+            background-color: #457b9d;
+        }
+
+        #message {
+            font-size: 20px;
+            color: #000;
+            background: #f1faee;
+            padding: 10px 20px;
+            border: 2px solid #457b9d;
+            border-radius: 10px;
+        }
+
+        .buttons {
+            margin-top: 20px;
+        }
+
+        .buttons button {
+            background-color: #457b9d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .buttons button:hover {
+            background-color: #1d3557;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Tic Tac Toe</h1>
+    <div id="message">Your Turn: X</div>
+
+    <div class="board" id="board">
+        <div class="cell" data-index="0"></div>
+        <div class="cell" data-index="1"></div>
+        <div class="cell" data-index="2"></div>
+        <div class="cell" data-index="3"></div>
+        <div class="cell" data-index="4"></div>
+        <div class="cell" data-index="5"></div>
+        <div class="cell" data-index="6"></div>
+        <div class="cell" data-index="7"></div>
+        <div class="cell" data-index="8"></div>
+    </div>
+
+    <div class="buttons">
+        <button onclick="restartGame()">Restart</button>
+        <button onclick="goBack()">Back</button>
+    </div>
+
+    <script>
+        const board = document.getElementById('board');
+        const cells = document.querySelectorAll('.cell');
+        const message = document.getElementById('message');
+        let currentPlayer = 'X';
+        let gameActive = true;
+
+        const winPatterns = [
+            [0,1,2], [3,4,5], [6,7,8], // rows
+            [0,3,6], [1,4,7], [2,5,8], // columns
+            [0,4,8], [2,4,6]            // diagonals
+        ];
+
+        function handleCellClick(e) {
+            const cell = e.target;
+            const index = cell.getAttribute('data-index');
+
+            if (cell.textContent !== '' || !gameActive) return;
+
+            cell.textContent = currentPlayer;
+            checkWin();
+            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            message.textContent = `Your Turn: ${currentPlayer}`;
+        }
+
+        function checkWin() {
+            for (const pattern of winPatterns) {
+                const [a, b, c] = pattern;
+                if (
+                    cells[a].textContent &&
+                    cells[a].textContent === cells[b].textContent &&
+                    cells[a].textContent === cells[c].textContent
+                ) {
+                    gameActive = false;
+                    alert(`${cells[a].textContent} Wins! 🎉`);
+                    message.textContent = `${cells[a].textContent} Wins! 🎉`;
+                    return;
+                }
+            }
+
+            // Check draw
+            let draw = true;
+            cells.forEach(cell => {
+                if (cell.textContent === '') {
+                    draw = false;
+                }
+            });
+
+            if (draw) {
+                gameActive = false;
+                alert("It's a Draw!");
+                message.textContent = "It's a Draw!";
+            }
+        }
+
+        function restartGame() {
+            cells.forEach(cell => cell.textContent = '');
+            currentPlayer = 'X';
+            message.textContent = 'Your Turn: X';
+            gameActive = true;
+        }
+
+        function goBack() {
+            window.location.href = "http://localhost/webp_games/index.php"; // change link if needed
+        }
+
+        cells.forEach(cell => cell.addEventListener('click', handleCellClick));
+    </script>
+
+</body>
+</html>

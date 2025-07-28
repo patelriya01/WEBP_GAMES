@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Classic Snake Game</title>
+    <style>
+        body {
+            background-color: #a8dadc; /* soft nice blue */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            font-family: monospace;
+            margin: 0;
+        }
+
+        canvas {
+            background-color: #1d3557; /* dark blue for canvas */
+            border: 5px solid #457b9d;
+        }
+
+        #score {
+            margin-top: 10px;
+            color: #000;
+            font-size: 20px;
+            background-color: #f1faee;
+            padding: 10px 20px;
+            border: 2px solid #457b9d;
+            border-radius: 10px;
+        }
+
+        .buttons {
+            margin-top: 20px;
+        }
+
+        .buttons button {
+            background-color: #457b9d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .buttons button:hover {
+            background-color: #1d3557;
+        }
+    </style>
+</head>
+<body>
+    <div id="score">Score: 0</div>
+    <canvas id="game" width="400" height="400"></canvas>
+    <div class="buttons">
+        <button onclick="restartGame()">Restart</button>
+        <button onclick="goBack()">Back</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById("game");
+        const ctx = canvas.getContext("2d");
+
+        const grid = 20;
+        let snake = [{ x: 160, y: 160 }];
+        let dx = grid;
+        let dy = 0;
+        let food = { x: 320, y: 320 };
+        let score = 0;
+        let interval;
+
+        function drawRect(x, y, color) {
+            ctx.fillStyle = color;
+            ctx.fillRect(x, y, grid - 1, grid - 1);
+        }
+
+        function gameLoop() {
+            const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+
+            // Wall collision
+            if (head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height) {
+                return gameOver();
+            }
+
+            // Self collision
+            for (let s of snake) {
+                if (s.x === head.x && s.y === head.y) return gameOver();
+            }
+
+            snake.unshift(head);
+
+            // Eat food
+            if (head.x === food.x && head.y === food.y) {
+                score++;
+                document.getElementById("score").innerText = "Score: " + score;
+                placeFood();
+
+                if (score >= 20) {
+                    return gameWin();
+                }
+            } else {
+                snake.pop();
+            }
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw food
+            drawRect(food.x, food.y, "#e63946");
+
+            // Draw snake
+            for (let s of snake) {
+                drawRect(s.x, s.y, "#f1faee");
+            }
+        }
+
+        function placeFood() {
+            food.x = Math.floor(Math.random() * (canvas.width / grid)) * grid;
+            food.y = Math.floor(Math.random() * (canvas.height / grid)) * grid;
+        }
+
+        function gameOver() {
+            clearInterval(interval);
+            alert("Game Over! Your score: " + score);
+        }
+
+        function gameWin() {
+            clearInterval(interval);
+            alert("🏆 You Win! Congratulations!");
+        }
+
+        function restartGame() {
+            // Reset everything
+            snake = [{ x: 160, y: 160 }];
+            dx = grid;
+            dy = 0;
+            score = 0;
+            document.getElementById("score").innerText = "Score: 0";
+            placeFood();
+            clearInterval(interval);
+            interval = setInterval(gameLoop, 150); // restart slower
+        }
+
+        function goBack() {
+            // you can link it later
+            window.location.href = "http://localhost/webp_games/index.php"; // change link if needed
+        }
+
+        document.addEventListener("keydown", e => {
+            if (e.key === "ArrowLeft" && dx === 0) {
+                dx = -grid;
+                dy = 0;
+            } else if (e.key === "ArrowRight" && dx === 0) {
+                dx = grid;
+                dy = 0;
+            } else if (e.key === "ArrowUp" && dy === 0) {
+                dy = -grid;
+                dx = 0;
+            } else if (e.key === "ArrowDown" && dy === 0) {
+                dy = grid;
+                dx = 0;
+            }
+        });
+
+        // Start slower (150ms instead of 100ms)
+        interval = setInterval(gameLoop, 150);
+    </script>
+</body>
+</html>

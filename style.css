@@ -1,0 +1,176 @@
+/* Global Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(to right, #e0eafc, #cfdef3);
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+/* Header */
+header {
+    background-color: #605340c5; /* 💥 More vibrant blue */
+    color: white;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.header-left h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+/* Header Right (Login / Profile) */
+.header-right {
+    display: flex;
+    align-items: center;
+    margin-left: auto; /* 🔥 Push to extreme right */
+}
+
+.header-right a {
+    color: white;
+    margin-left: 20px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.header-right a:hover {
+    text-decoration: underline;
+}
+
+.profile-icon {
+    font-size: 18px;
+}
+
+/* Main Content */
+main {
+    margin: 30px auto;
+    max-width: 1000px;
+}
+
+main h2 {
+    font-size: 32px;
+    color: #004080;
+}
+
+main p {
+    font-size: 18px;
+    color: #333;
+}
+
+#games {
+    margin-top: 40px;
+}
+
+#games h3 {
+    font-size: 24px;
+    color: #0055a5;
+}
+
+/* Game List */
+.game-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.game {
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    width: 160px;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s;
+}
+
+.game:hover {
+    transform: translateY(-8px);
+}
+
+.game img {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.game p {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Abstract Section */
+#abstract {
+    background: #ffffff;
+    padding: 30px 20px;
+    margin-top: 50px;
+    border-top: 2px solid #0077cc;
+}
+
+#abstract h2 {
+    font-size: 26px;
+    color: #0055a5;
+}
+
+#abstract p {
+    font-size: 18px;
+    color: #444;
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+/* Forms (Sign Up & Login) */
+form {
+    background-color: white;
+    padding: 40px;
+    margin: 50px auto;
+    width: 350px;
+    border-radius: 15px;
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+}
+
+form h2 {
+    margin-bottom: 20px;
+    color: #0055a5;
+}
+
+input, button {
+    width: 90%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+input:focus {
+    border-color: #0077cc;
+    outline: none;
+}
+
+button {
+    background-color: #0077cc;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #0055a5;
+}
+
+/* Footer */
+footer {
+    background-color: #605340c5; /* 💥 More vibrant footer */
+    color: white;
+    padding: 15px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    margin-top: 60px;
+}
